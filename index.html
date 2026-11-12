@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trò chơi ôn tập HSK1</title>
+<style>
+:root{--muc:#1E1413;--giay:#F6EFE4;--giay-mo:#CDBDA8;--son:#C1392F;--vang:#D79A28}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--muc);color:var(--giay);font-family:"Be Vietnam Pro",system-ui,sans-serif;padding:32px 16px}
+main{max-width:560px;margin:0 auto}
+h1{font-size:1.5rem;margin:0 0 4px}
+p.sub{color:var(--giay-mo);margin:0 0 24px}
+a.bai{display:flex;align-items:center;gap:14px;padding:16px 18px;margin-bottom:10px;border:1px solid #4a3835;border-radius:14px;background:#2B1D1B;color:inherit;text-decoration:none}
+a.bai:hover{border-color:var(--vang)}
+a.bai b{font-size:1.1rem;color:var(--vang);min-width:3.2em}
+a.bai span{color:var(--giay-mo);font-size:.9rem}
+#trong{color:var(--giay-mo)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Trò chơi ôn tập HSK1</h1>
+  <p class="sub">Chọn bài để chơi · 《新HSK教程1》</p>
+  <div id="ds"><p id="trong">Đang tải danh sách bài…</p></div>
+</main>
+<script>
+/* Tự dò bai-01.html, bai-02.html, … ; cho phép thiếu bài giữa chừng, dừng sau 3 bài trống liên tiếp */
+(async function(){
+  const found=[];
+  for(let n=1,miss=0;n<=60&&miss<3;n++){
+    const f='bai-'+String(n).padStart(2,'0')+'.html';
+    try{ const r=await fetch(f,{method:'HEAD'}); if(r.ok){found.push({n,f});miss=0;} else miss++; }
+    catch(e){ miss++; }
+  }
+  const ds=document.getElementById('ds');
+  if(!found.length){ ds.innerHTML='<p id="trong">Chưa có bài nào.</p>'; return; }
+  ds.innerHTML=found.reverse().map(x=>'<a class="bai" href="'+x.f+'"><b>Bài '+x.n+'</b><span>Vòng xoay câu hỏi</span></a>').join('');
+})();
+</script>
+</body>
+</html>
